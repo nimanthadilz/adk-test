@@ -1,0 +1,38 @@
+{
+  "eval_set_id": "evalsete1d25b",
+  "name": "evalsete1d25b",
+  "eval_cases": [
+    {
+      "eval_id": "case044502",
+      "conversation": [
+        {
+          "invocation_id": "e-830abf5a-4c8d-4272-94ee-7bc366ce89ab",
+          "user_content": {
+            "parts": [
+              {
+                "text": "hi"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "Sorry, I cannot handle that request.\n"
+              }
+            ],
+            "role": "model"
+          },
+          "intermediate_data": {},
+          "creation_timestamp": 1762170747.396904
+        }
+      ],
+      "session_input": {
+        "app_name": "agents",
+        "user_id": "user"
+      },
+      "creation_timestamp": 1762170762.515261
+    }
+  ],
+  "creation_timestamp": 1762170755.0149255
+}

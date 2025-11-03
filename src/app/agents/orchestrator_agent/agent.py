@@ -1,8 +1,8 @@
 from google.adk.agents import LlmAgent
 
-from .sub_agents.capital_agent.agent import root_agent as capital_agent
+from ..capital_agent import capital_agent
 
-root_agent = LlmAgent(
+orchestrator_agent = LlmAgent(
     name="orchestrator_agent",
     model="gemini-2.0-flash",
     description=("An agent to orchestrate tasks among multiple agents"),
@@ -16,3 +16,6 @@ root_agent = LlmAgent(
     ),
     sub_agents=[capital_agent],
 )
+
+# Expose as root_agent for ADK CLI
+root_agent = orchestrator_agent

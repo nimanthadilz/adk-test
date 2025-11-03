@@ -2,7 +2,7 @@ from google.adk.agents import LlmAgent
 from google.adk.agents.callback_context import CallbackContext, ReadonlyContext
 from google.adk.utils import instructions_utils
 
-root_agent = LlmAgent(
+capital_agent = LlmAgent(
     name="capital_agent",
     model="gemini-2.0-flash",
     description=("Agent to provide information about capital cities"),
