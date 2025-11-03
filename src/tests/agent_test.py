@@ -11,4 +11,6 @@ async def test_with_single_test_file():
     await AgentEvaluator.evaluate(
         agent_module="src.agents.orchestrator_agent",
         eval_dataset_file_path_or_dir="./src/tests/agents/orchestrator_agent/evalset56f9a2.evalset.json",
+        print_detailed_results=True,
+        num_runs=1
     )
