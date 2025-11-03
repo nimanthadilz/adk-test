@@ -1,0 +1,17 @@
+    {
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "name": "Python: Debug Pytest",
+                "type": "debugpy",
+                "request": "launch",
+                "program": "${workspaceFolder}/.venv/Scripts/pytest.exe", // Adjust path to your pytest executable in your virtual environment
+                "args": [
+                    "src/tests" // Debug the current test file
+                ],
+                "purpose": ["debug-test"],
+                "console": "integratedTerminal",
+                "justMyCode": false // Important for stepping into package code
+            }
+        ]
+    }
