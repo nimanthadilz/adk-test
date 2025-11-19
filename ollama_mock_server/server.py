@@ -224,7 +224,7 @@ async def version():
     return {"version": "0.1.0"}
 
 
-def run_server(host: str = "127.0.0.1", port: int = 11434):
+def run_server(host: str = "0.0.0.0", port: int = 11434):
     """Run the mock Ollama server."""
     uvicorn.run(app, host=host, port=port)
 

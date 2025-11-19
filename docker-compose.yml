@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  # PostgreSQL database for session storage
+  postgres:
+    image: postgres:15
+    container_name: adk-postgres
+    environment:
+      POSTGRES_USER: ${DB_USER:-adk_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-adk_password}
+      POSTGRES_DB: mydatabase
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U adk_user -d mydatabase"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - adk-network
+
+  # Mock Ollama server
+  ollama-mock:
+    build:
+      context: ./ollama_mock_server
+      dockerfile: Dockerfile
+    container_name: ollama-mock-server
+    ports:
+      - "11434:11434"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:11434/')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - adk-network
+
+  # ADK application
+  adk-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: adk-app
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_HOST=postgres
+      - DB_USER=${DB_USER:-adk_user}
+      - DB_PASSWORD=${DB_PASSWORD:-adk_password}
+      - OLLAMA_API_BASE=http://ollama-mock:11434
+    depends_on:
+      postgres:
+        condition: service_healthy
+      ollama-mock:
+        condition: service_started
+    volumes:
+      - ./src:/app/src
+      - ./.env:/app/.env
+    networks:
+      - adk-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  adk-network:
+    driver: bridge
