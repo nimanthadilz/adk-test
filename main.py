@@ -3,24 +3,24 @@ from pydantic import BaseModel
 from google.adk.runners import Runner
 from google.adk.cli.fast_api import get_fast_api_app
 from google.genai.types import Content, Part
-from google.adk.sessions import InMemorySessionService
-from agents.orchestrator_agent.agent import root_agent as orchestrator_agent
+from google.adk.sessions import DatabaseSessionService
+from src.agents.jokes_agent.agent import root_agent as jokes_agent
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
 load_dotenv()
 
-APP_NAME = "orchestrator_app"
+APP_NAME = "jokes_app"
 USER_ID = "user_123"
 SESSION_ID = "session_123"
 
-# app = FastAPI(app_name="orchestrator_app", title="Orchestrator API", version="1.0.0")
+# app = FastAPI(app_name="jokes_app", title="Jokes API", version="1.0.0")
 app = get_fast_api_app(agents_dir="./agents", reload_agents=True, web=True)
 
-session_service = InMemorySessionService()
+session_service = DatabaseSessionService(db_url="sqlite:///./sessions.db")
 runner = Runner(
-    agent=orchestrator_agent,
-    app_name="orchestrator_app",
+    agent=jokes_agent,
+    app_name="jokes_app",
     session_service=session_service,
 )
 
@@ -33,8 +33,8 @@ class AgentResponse(BaseModel):
     agent_response: str
 
 
-@app.post("/orchestrator")
-async def call_orchestrator(request: UserQueryRequest):
+@app.post("/agent")
+async def call_agent(request: UserQueryRequest):
     session = await session_service.get_session(
         app_name=APP_NAME, user_id=USER_ID, session_id=SESSION_ID
     )
@@ -50,6 +50,6 @@ async def call_orchestrator(request: UserQueryRequest):
         user_id=USER_ID, session_id=SESSION_ID, new_message=user_content
     ):
         if event.is_final_response() and event.content and event.content.parts:
-            final_response_content = event.content.parts[0].text
+            final_response_content = event.content.parts[0].text or "No response"
 
     return AgentResponse(agent_response=final_response_content)
