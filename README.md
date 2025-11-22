@@ -12,6 +12,9 @@ source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 # Install dependencies
 pip install -r requirements.txt
 
+# You need to install google-adk package separately with the patch.
+pip install google_adk-1.19.0-py3-none-any.whl
+
 # Set API key
 echo "GOOGLE_API_KEY=your_api_key_here" > .env
 
