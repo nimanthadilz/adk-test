@@ -33,7 +33,7 @@ db_path = os.path.join(os.getcwd(), "sessions.db")
 session_service = SqliteSessionService(db_path=db_path)
 runner = Runner(
     agent=jokes_agent,
-    app_name="jokes_app",
+    app_name=APP_NAME,
     session_service=session_service,
 )
 
